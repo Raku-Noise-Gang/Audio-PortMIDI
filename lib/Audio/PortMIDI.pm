@@ -872,7 +872,8 @@ class Audio::PortMIDI {
         sub Pm_SetFilter(StreamPointer $stream , int32 $filters) is native(LIB) returns int32 { * }
 
         method set-filter(Int $filter) {
-            my $rc = Pm_SetFilter($.ptr[0], $filter);
+            $.ev-chan.send(%(call => &Pm_SetFilter, args => [$.ptr[0], $filter]);
+            my $rc = await $.rc-chan; 
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => 'setting filter').throw;
             }
@@ -883,7 +884,8 @@ class Audio::PortMIDI {
 
         method set-channel-mask(*@channels where { @channels.elems <= 16 && all(@channels) ~~ ( 0 ..15 ) }) {
             my int $mask = @channels.map(1 +< *).reduce(&[+|]);
-            my $rc = Pm_SetChannelMask($.ptr[0], $mask);
+            $.ev-chan.send(%(call => &Pm_SetChannelMask, args => [$.ptr, $mask]);
+            my $rc = await $.rc-chan;
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => 'setting channel mask').throw;
             }
@@ -921,7 +923,8 @@ class Audio::PortMIDI {
         sub Pm_Synchronize(StreamPointer $stream ) is native(LIB) returns int32 { * }
 
         method synchronize() {
-            my $rc = Pm_Synchronize($.ptr[0]);
+            $.ev-chan.send(%(call => &Pm_Synchronize, args => [$.ptr]));
+            my $rc = $.rc-chan;
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => "synchronizing stream").throw;
             }
@@ -931,7 +934,8 @@ class Audio::PortMIDI {
         sub Pm_Poll(StreamPointer $stream ) is native(LIB) returns int32 { * }
 
         method poll() returns Bool {
-            my $rc = Pm_Poll($.ptr[0]);
+            $.ev-chan.send(%(call => &Pm_Poll, args => [$.ptr]));
+            my $rc = await $.rc-chan;
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => "polling stream").throw;
             }
@@ -946,7 +950,8 @@ class Audio::PortMIDI {
         multi method read(Int $length) {
             my CArray[int64] $buff = CArray[int64].new;
             $buff[$length - 1] = 0;
-            my $rc = Pm_Read($.ptr[0], $buff, $length);
+            $.ev-chan.send(%(call => &Pm_Read, args => [$.ptr, $buff, $length]));
+            my $rc = await $.rc-chan;
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => "reading stream").throw;
             }
@@ -1122,7 +1127,7 @@ class Audio::PortMIDI {
         if $rc < 0 {
             X::PortMIDI.new(code => $rc, what => "opening output stream").throw;
         }
-        $stream[0];
+        $stream;
     }
 }
 
