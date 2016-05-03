@@ -894,10 +894,10 @@ class Audio::PortMIDI {
 
         method abort() {
             $!running = False;
-            $.ev-chan.send(False => False);
-            await $.ev-chan-promise;
-            $.ev-chan.close;
-            $.rc-chan.close;
+            $.ev-chan.fail;
+            # await $.ev-chan-promise;
+            # $.ev-chan.close;
+            $.rc-chan.fail;
             my $rc = Pm_Abort($.ptr[0]);
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => "aborting stream").throw;
@@ -907,8 +907,8 @@ class Audio::PortMIDI {
         sub Pm_Close(StreamPointer $stream) is native(LIB) returns int32 { * }
 
         method close() {
+            $.ev-chan.send(%(call => &note, args => ["Closing Stream"]));
             $!running = False;
-            $.ev-chan.send(False => False);
             await $.ev-chan-promise;
             $.ev-chan.close;
             $.rc-chan.close;
