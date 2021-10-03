@@ -2,6 +2,8 @@
 
 Raku MIDI access using the portmidi library
 
+[![CI](https://github.com/Raku-Noise-Gang/Audio-PortMIDI/actions/workflows/main.yml/badge.svg)](https://github.com/Raku-Noise-Gang/Audio-PortMIDI/actions/workflows/main.yml)
+
 ## Synopsis
 
 ```raku
