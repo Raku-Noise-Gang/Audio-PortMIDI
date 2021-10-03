@@ -1,10 +1,10 @@
 # Audio::PortMIDI
 
-Perl6 MIDI access using the portmidi library
+Raku MIDI access using the portmidi library
 
 ## Synopsis
 
-```perl6
+```raku
 
 use Audio::PortMIDI;
 
@@ -35,7 +35,7 @@ See also the [examples](examples) directory for more complete examples.
 
 ## Description
 
-This allows you to get MIDI data into or out of your Perl 6 programs. It
+This allows you to get MIDI data into or out of your Raku programs. It
 provides the minimum abstraction to construct and unpack MIDI messages
 and send and receive them via some interface available on your system,
 be that ALSA on Linux, CoreMidi on Mac OS/X or whatever it is that
@@ -64,7 +64,7 @@ On Linux you will need need permissions to the sequencer device, typically
 this is provided by a member of the *audio* group however this may differ
 by distribution so you might need to check if this doesn't work.
 
-Assuming you have the libray installed and have a working rakudo perl 6
+Assuming you have the libray installed and have a working rakudo 
 installation the you should be able to install directly with ```zef```:
 
     zef install Audio::PortMIDI
@@ -97,7 +97,7 @@ may help rule out problems with this module.
 
 If you have a problem or a suggestion then please raise an issue at:
 
-     https://github.com/Perl6-Noise-Gang/Audio-PortMIDI/issues
+     https://github.com/Raku-Noise-Gang/Audio-PortMIDI/issues
 
 Obviously if you have some query regarding interoperability with some
 particular device or software I am unlikely to be able to help much
@@ -109,7 +109,7 @@ MIDI events being sent or received may help.
 This is free software. Please see the LICENCE file in the distribution
 for the terms of the license.
 
-	© Jonathan Stowe, 2016, 2017
-	© Perl 6 Noise Gang
+	© Jonathan Stowe, 2016, 2017, 2021
+	© Raku Noise Gang
 	
 

@@ -1,4 +1,4 @@
-#!perl6
+#!raku
 
 use Audio::PortMIDI;
 
@@ -90,4 +90,4 @@ sub MAIN(Int :$bpm = 120, Int :$channel = 9, Int :$device = 3) {
     }
 }
 
-# vim: expandtab shiftwidth=4 ft=perl6
+# vim: expandtab shiftwidth=4 ft=raku

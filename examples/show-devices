@@ -1,4 +1,4 @@
-#!perl6
+#!raku
 
 use Audio::PortMIDI;
 
@@ -14,4 +14,4 @@ sub MAIN(Bool :$input = False, Bool :$output = False) {
 }
 
 
-# vim: expandtab shiftwidth=4 ft=perl6
+# vim: expandtab shiftwidth=4 ft=raku

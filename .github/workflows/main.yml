@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    container:
+      image: rakudo-star:latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Raku version
+      run: raku -v
+
+    - name: Update apt
+      run: apt -y update
+
+    - name: install portaudio
+      run: apt -y install libportmidi0
+
+    - name: Install dependencies
+      run: zef install --deps-only --/test --test-depends .
+
+    - name: Run tests
+      run: zef test -v --debug .

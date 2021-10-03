@@ -1,4 +1,4 @@
-#!perl6
+#!raku
 
 use Audio::PortMIDI;
 
@@ -47,4 +47,4 @@ sub MAIN(Str :$mode = 'mixolydian', Int :$root = 25, Int :$output = 3, Int :$bpm
     }
 }
 
-# vim: expandtab shiftwidth=4 ft=perl6
+# vim: expandtab shiftwidth=4 ft=raku

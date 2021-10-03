@@ -1,10 +1,10 @@
-use v6.c;
+use v6;
 
 =begin pod
 
 =head1 NAME
 
-Audio::PortMIDI - Perl6 MIDI access using the portmidi library
+Audio::PortMIDI - Raku MIDI access using the portmidi library
 
 =head1 SYNOPSIS
 
@@ -39,25 +39,25 @@ See also the examples directory in the distributtion for more complete examples.
 
 =head1 DESCRIPTION
 
-This allows you to get MIDI data into or out of your Perl 6 programs. It
+This allows you to get MIDI data into or out of your Raku programs. It
 provides the minimum abstraction to construct and unpack MIDI messages
 and send and receive them via some interface available on your system,
 be that ALSA on Linux, CoreMidi on Mac OS/X or whatever it is that
 Windows uses.  Depending on the way that the portmidi library is built
 there may be other interfaces available.
 
-The MIDI specification itself doesn't particularly provide for the 
+The MIDI specification itself doesn't particularly provide for the
 arrangement of the events themselves in time and this is assumed to
-be the responsibility of the calling application.  
+be the responsibility of the calling application.
 
 You almost certainly will want to familiarise yourself to some extent
 with the L<MIDI protocol|http://www.midi.org> and especially the types
 of messages that are sent as the interface of PortMIDI and hence this
 module is fairly "close to the wire".
 
-One thing that should be noted is that currently this uses the 
+One thing that should be noted is that currently this uses the
 default time source provided by the PortMIDI library, which you can
-access in your own programs, if synchronization to an alternative 
+access in your own programs, if synchronization to an alternative
 clock is required the native subroutines would support it, just not
 available through the public interface at this time.
 
@@ -105,7 +105,7 @@ exception will be thrown.
 
     method device-info(Int $device-id) returns DeviceInfo
 
-This returns a L<Audio::PortMIDI::DeviceInfo|#Audio::PortMIDI::DeviceInfo> 
+This returns a L<Audio::PortMIDI::DeviceInfo|#Audio::PortMIDI::DeviceInfo>
 object describing the device specified as the integer device ID, which
 should be between 0 and count-devices - 1.  If the number is out of range
 or there is some other problem getting the device information an exception
@@ -115,7 +115,7 @@ will be thrown.
 
     method devices()
 
-This returns the list of all the devices on the system as 
+This returns the list of all the devices on the system as
 L<Audio::PortMIDI::DeviceInfo|#Audio::PortMIDI::DeviceInfo> objects. which is
 really just a shortcut combining the above two methods.  If there is a problem
 getting the list then an exception will be thrown.
@@ -416,7 +416,7 @@ Objects of this type represent MIDI messages and are returned from
 C<read> and passed to C<write> on a stream, they provide a very thin
 abstraction over the MIDI message itself as well as the C<timestamp>
 that may be used by C<portmidi> for the timing of the delivery of
-the message but is not part of the MIDI specification. 
+the message but is not part of the MIDI specification.
 
 An actual MIDI message on the wire comprises three bytes: a C<status>
 byte that encodes the command and, for channel messages, the channel
@@ -424,7 +424,7 @@ number and two data bytes of which one or both may be ignored for
 certain commands. (the values of the data bytes are actually 7 bits
 the high bit should be left unset, i.e. they are values 0 .. 127.)
 Whilst some sugar is provided for some message types you really
-should familiarise yourself with the MIDI specification if you 
+should familiarise yourself with the MIDI specification if you
 want to get the most out of this.
 
 A good summary of the structure of MIDI messages can be found in
@@ -437,20 +437,20 @@ L<https://www.midi.org/specifications/item/table-1-summary-of-midi-message>
 
 This is the constructor for objects of this class. Except for C<event>
 the named arguments relate to the attributes of this class described
-below.  
+below.
 
 C<event> is used when the object is being constructed from the value
-returned by C<portmidi> in C<read> (it is the timestamp and the 
+returned by C<portmidi> in C<read> (it is the timestamp and the
 entire MIDI message packed into a 64 bit Int,) you will almost certainly
 not need to use this in your own code.
 
-If creating an object of this type you should provide C<timestamp> 
+If creating an object of this type you should provide C<timestamp>
 (it can be 0 if you are not using the timing facilities described
 above, but if set to greater than 0 should never decrease.)
 
 C<status> comprises the C<channel> and C<event-type> and it doesn't
 make sense to provide all three to the constructor.  Typically you
-should use C<channel> and C<event-type> for "channel messages" 
+should use C<channel> and C<event-type> for "channel messages"
 (e.g. "note on", "note off", "program change", "control change") and
 C<status> for "system messages" such as MIDI clock where the specific
 message type is specified by the entire status byte.
@@ -487,7 +487,7 @@ don't receive one so it's better to send it in all cases.
 
 =head3 NoteOn
 
-This starts a "note". C<data-one> should be the "note number" in 
+This starts a "note". C<data-one> should be the "note number" in
 the range 0 .. 127 and C<data-two> the "velocity" (again 0 .. 127.)
 Unless the target instrument is percussive or has a similar short
 envelope it should be followed by a NoteOff with the same data
@@ -517,12 +517,12 @@ free to interpret them how you wish on reading messages.
 =head3 ProgramChange
 
 This requests that the "program" or "patch" is changed on the
-specified channel, the new program number is supplied in 
+specified channel, the new program number is supplied in
 C<data-one>, C<data-two> should be ignored by most devices
 but ideally should be 0. The documentation of the device
 may describe the programs but often they can be user defined.
 Some synthesizers may allow multiple "banks" of programs
-which can be specified by a control change, but you will 
+which can be specified by a control change, but you will
 need to refer to the specific documentation about this.
 
 =head3 ChannelPressure
@@ -541,7 +541,7 @@ active notes (though a device could conceivably interpret
 it differently) the amount of "bend" is specified as a
 14 bit value with the 7 most significant bits in C<data-one>
 and the 7 least significant in C<data-two>.  You can
-consider this as being 0 .. 127 of "coarse" modulation 
+consider this as being 0 .. 127 of "coarse" modulation
 in C<data-one> and 0 .. 127 of "fine" control in C<data-two>
 if it is easier.
 
@@ -559,7 +559,7 @@ the appropriate C<status>.
 This is the entire status byte, if this has the highest
 four bits set (i.e. it has the value of 240 or greater) then
 the message is a "system message", and the C<event-type> and
-C<channel> are probably not meaningful themselves (the 
+C<channel> are probably not meaningful themselves (the
 C<event-type> is C<SystemMessage> and the lower four bits
 indicate the actual message type.)  If you set this then you
 do not need to set the C<event-type> and C<channel> and vice
@@ -575,7 +575,7 @@ tempo in your application:
 If a clock is being provided to or from a device events of
 this type are sent 24 times per quarter note (or every
 0.020833 seconds at 120 beats per minute.) This sort of
-frequency should be doable in a Perl program though various
+frequency should be doable in a Raku program though various
 scheduling delays may mean it will be difficult to maintain
 accuracy at higher tempos without using the C<portmidi> timer.
 
@@ -690,11 +690,11 @@ class Audio::PortMIDI {
         }
 
         method gist() {
-            sprintf "%3i :  %-25s  %10s  %2s   %3s   %4s", self.device-id, 
-                                                        self.name, 
+            sprintf "%3i :  %-25s  %10s  %2s   %3s   %4s", self.device-id,
+                                                        self.name,
                                                         self.interface,
                                                         ( self.input ?? 'In' !! '--' ),
-                                                        ( self.output ?? 'Out' !! '---' ), 
+                                                        ( self.output ?? 'Out' !! '---' ),
                                                         (self.opened ?? 'Open' !! '----');
         }
 
@@ -873,7 +873,7 @@ class Audio::PortMIDI {
 
         method set-filter(Int $filter) {
             $.ev-chan.send(%(call => &Pm_SetFilter, args => [$.ptr[0], $filter]));
-            my $rc = await $.rc-chan; 
+            my $rc = await $.rc-chan;
             if $rc < 0 {
                 X::PortMIDI.new(code => $rc, what => 'setting filter').throw;
             }
@@ -919,7 +919,7 @@ class Audio::PortMIDI {
                 X::PortMIDI.new(code => $rc, what => "closing stream").throw;
             }
         }
-    
+
         sub Pm_Synchronize(StreamPointer $stream ) is native(LIB) returns int32 { * }
 
         method synchronize() {
@@ -1006,7 +1006,7 @@ class Audio::PortMIDI {
         sub Pt_Start(int32 $resolution, &ccb (int32 $timestamp, Pointer $userdata), Pointer $u) returns int32 is native(LIB) { * }
 
         method start() {
-            Pt_Start(1, Code, Pointer);
+            Pt_Start(1, Pointer, Pointer);
         }
 
         sub Pt_Time() returns int32 is native(LIB) { * }
@@ -1099,7 +1099,7 @@ class Audio::PortMIDI {
 
     multi method open-input(Int $device-id, Int $buffer-size) returns Stream {
         my $stream = Stream.new;
-        my $rc = Pm_OpenInput($stream.ptr, $device-id, Pointer, $buffer-size, Code, Pointer);
+        my $rc = Pm_OpenInput($stream.ptr, $device-id, Pointer, $buffer-size, Pointer, Pointer);
         if $rc < 0 {
             X::PortMIDI.new(code => $rc, what => "opening input stream").throw;
         }
@@ -1108,7 +1108,7 @@ class Audio::PortMIDI {
 
     sub Pm_OpenOutput(CArray[StreamPointer] $stream, int32 $outputDevice, Pointer $outputDriverInfo, int32 $bufferSize ,&time_proc (Pointer --> int32), Pointer $time_info, int32 $latency) is native(LIB) returns int32 { * }
 
-    
+
     proto method open-output(|c) { * }
 
 
@@ -1123,7 +1123,7 @@ class Audio::PortMIDI {
 
     multi method open-output(Int $device-id, Int $buffer-size, Int $latency = 0) returns Stream {
         my $stream = Stream.new;
-        my $rc = Pm_OpenOutput($stream.ptr, $device-id, Pointer, $buffer-size, Code, Pointer, $latency);
+        my $rc = Pm_OpenOutput($stream.ptr, $device-id, Pointer, $buffer-size, Pointer, Pointer, $latency);
         if $rc < 0 {
             X::PortMIDI.new(code => $rc, what => "opening output stream").throw;
         }
@@ -1131,4 +1131,4 @@ class Audio::PortMIDI {
     }
 }
 
-# vim: expandtab shiftwidth=4 ft=perl6
+# vim: expandtab shiftwidth=4 ft=raku
