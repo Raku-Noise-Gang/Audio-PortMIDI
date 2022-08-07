@@ -1,21 +1,29 @@
 {
   "name": "Audio::PortMIDI",
-  "source-url": "git://github.com/Raku-Noise-Gang/Audio-PortMIDI.git",
-  "support": {
-    "irc": "irc://irc.freenode.net/raku-noise-gang",
-    "source": "git://github.com/Raku-Noise-Gang/Audio-PortMIDI.git"
-  },
-  "perl": "6.*",
-  "raku": "6.*",
   "resources": [
   ],
-  "build-depends": [
-  ],
-  "auth": "github:Raku-Noise-Gang",
-  "api": "1.0",
+  "description": "Raku MIDI access using the portmidi library",
+  "support": {
+    "source": "git://github.com/Raku-Noise-Gang/Audio-PortMIDI.git",
+    "irc": "irc://irc.freenode.net/raku-noise-gang"
+  },
+  "raku": "6.*",
+  "provides": {
+    "Audio::PortMIDI": "lib/Audio/PortMIDI.rakumod"
+  },
+  "license": "Artistic-2.0",
   "depends": [
     "Util::Bitfield"
   ],
+  "build-depends": [
+  ],
+  "api": "1.0",
+  "source-url": "git://github.com/Raku-Noise-Gang/Audio-PortMIDI.git",
+  "auth": "zef:jonathanstowe",
+  "test-depends": [
+    "LibraryCheck"
+  ],
+  "version": "0.0.12",
   "tags": [
     "MIDI",
     "audio",
@@ -23,18 +31,9 @@
     "sequencer",
     "noise-gang"
   ],
-  "license": "Artistic-2.0",
-  "test-depends": [
-    "LibraryCheck"
-  ],
-  "provides": {
-    "Audio::PortMIDI": "lib/Audio/PortMIDI.rakumod"
-  },
-  "version": "0.0.11",
+  "meta-version": "0",
   "authors": [
     "Jonathan Stowe <jns+gh@gellyfish.co.uk>",
     "Pepe Schwarz <peschwa@gmail.com>"
-  ],
-  "description": "Raku MIDI access using the portmidi library",
-  "meta-version": "0"
+  ]
 }
